@@ -37,9 +37,14 @@ const App = () => {
     },
   ];
 
-  let [searchTerm, setSearchTerm] = React.useState('React');
+  const [searchTerm, setSearchTerm] = React.useState(
+    localStorage.getItem('search') || 'React',
+  );
 
-  const handleSearch = (event) => setSearchTerm(event.target.value);
+  const handleSearch = (event) => {
+    setSearchTerm(event.target.value);
+    localStorage.setItem('search', event.target.value);
+  };
 
   const filteredSearch = stories.filter((story) =>
     story.title.toLowerCase().includes(searchTerm.toLowerCase()),
@@ -48,7 +53,7 @@ const App = () => {
   return (
     <div>
       <h1>Hacker Stories</h1>
-      <Search onSearch={handleSearch} />
+      <Search search={searchTerm} onSearch={handleSearch} />
       <hr />
       {/* render the list here */}
       <List list={filteredSearch} />
@@ -56,39 +61,30 @@ const App = () => {
   );
 };
 
-const Search = (props) => {
-  return (
-    <div>
-      <label htmlFor="search">Search: </label>
-      <input type="text" id="search" onChange={props.onSearch} />
-    </div>
-  );
-};
+const Search = ({ search, onSearch }) => (
+  <div>
+    <label htmlFor="search">Search: </label>
+    <input id="search" type="text" value={search} onChange={onSearch} />
+  </div>
+);
 
-const List = ({ list }) => {
-  return (
-    <div>
-      {/* render the list here */}
-      <ul>
-        {list.map((item) => (
-          <Item key={item.objectID} item={item} />
-        ))}
-      </ul>
-    </div>
-  );
-};
+const List = ({ list }) => (
+  <ul>
+    {list.map(({ objectID, ...item }) => (
+      <Item key={objectID} item={item} />
+    ))}
+  </ul>
+);
 
-const Item = ({ item }) => {
-  return (
-    <li>
-      <span>
-        {item.title} <a href={item.url}>{item.title}</a>
-      </span>
-      <span>{item.author}</span>
-      <span>{item.num_comments}</span>
-      <span>{item.points}</span>
-    </li>
-  );
-};
+const Item = ({ item }) => (
+  <li>
+    <span>
+      <a href={item.url}>{item.title}</a>
+    </span>
+    <span>{item.author}</span>
+    <span>{item.num_comments}</span>
+    <span>{item.points}</span>
+  </li>
+);
 
 export default App;
