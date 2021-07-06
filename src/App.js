@@ -5,9 +5,9 @@ const useSemiPersistentState = (key, initialState) => {
   const [value, setValue] = React.useState(
     localStorage.getItem(key) || initialState,
   );
-  React.useEffect(() => {
-    localStorage.setItem(key, value);
-  }, [key, value]);
+
+  React.useEffect(() => localStorage.setItem(key, value), [key, value]);
+
   return [value, setValue];
 };
 
@@ -75,10 +75,10 @@ const App = () => {
 };
 
 const Search = ({ search, onSearch }) => (
-  <div>
+  <>
     <label htmlFor="search">Search: </label>
     <input id="search" type="text" value={search} onChange={onSearch} />
-  </div>
+  </>
 );
 
 const List = ({ list }) => (
