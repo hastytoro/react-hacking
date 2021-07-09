@@ -1,54 +1,5 @@
 import * as React from 'react';
 
-const initialStories = [
-  {
-    title: 'React',
-    url: 'https://reactjs.org/',
-    author: 'Jordan Walke',
-    num_comments: 3,
-    points: 4,
-    objectID: 0,
-  },
-  {
-    title: 'Redux',
-    url: 'https://redux.js.org/',
-    author: 'Dan Abramov',
-    num_comments: 2,
-    points: 5,
-    objectID: 1,
-  },
-  {
-    title: 'GitHub',
-    url: 'https://github.com/',
-    author: 'Tom Preston',
-    num_comments: 1,
-    points: 3,
-    objectID: 2,
-  },
-  {
-    title: 'MDN',
-    url: 'https://developer.mozilla.org/',
-    author: 'Netscape Communications',
-    num_comments: 4,
-    points: 5,
-    objectID: 3,
-  },
-];
-
-const getAsyncStories = () => {
-  return new Promise((resolve, reject) =>
-    setTimeout(
-      () =>
-        resolve({
-          data: {
-            stories: initialStories,
-          },
-        }),
-      5000,
-    ),
-  );
-};
-
 const useSemiPersistentState = (key, initialState) => {
   const [value, setValue] = React.useState(
     localStorage.getItem(key) || initialState,
@@ -93,6 +44,8 @@ const storiesReducer = (state, action) => {
   }
 };
 
+const API_ENDPOINT = 'https://hn.algolia.com/api/v1/search?query=';
+
 const App = () => {
   const [searchTerm, setSearchTerm] = useSemiPersistentState('search', 'React');
 
@@ -103,16 +56,19 @@ const App = () => {
   });
 
   React.useEffect(() => {
+    console.log(searchTerm);
+    if (!searchTerm) return;
     dispatchStories({ type: 'STORIES_FETCH_INIT' });
-    getAsyncStories()
+    fetch(`${API_ENDPOINT}${searchTerm}`)
+      .then((response) => response.json())
       .then((result) => {
         dispatchStories({
           type: 'STORIES_FETCH_SUCCESS',
-          payload: result.data.stories,
+          payload: result.hits,
         });
       })
       .catch(() => dispatchStories({ type: 'STORIES_FETCH_FAILURE' }));
-  }, []);
+  }, [searchTerm]);
 
   const handleRemoveStory = (item) => {
     dispatchStories({
@@ -124,10 +80,6 @@ const App = () => {
   const handleSearch = (event) => {
     setSearchTerm(event.target.value);
   };
-
-  const searchedStories = stories.data.filter((story) =>
-    story.title.toLowerCase().includes(searchTerm.toLowerCase()),
-  );
 
   return (
     <div>
@@ -145,7 +97,7 @@ const App = () => {
       {stories.isLoading ? (
         <p>Loading...</p>
       ) : (
-        <List list={searchedStories} onRemoveItem={handleRemoveStory} />
+        <List list={stories.data} onRemoveItem={handleRemoveStory} />
       )}
     </div>
   );
