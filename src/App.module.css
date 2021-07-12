@@ -7,12 +7,12 @@
 
   color: #171212;
 }
-
-.headline-primary {
+.headlinePrimary {
   font-size: 48px;
   font-weight: 300;
   letter-spacing: 2px;
 }
+
 
 .item {
   display: flex;
@@ -41,19 +41,19 @@
   background: #171212;
   color: #ffffff;
 }
-.button_small {
+.buttonSmall {
   padding: 5px;
 }
-.button_large {
+.buttonLarge {
   padding: 10px;
 }
 
-.search-form{
+.searchForm{
   padding: 10px 0 20px 0;
   display: flex;
   align-items: baseline;
-}
-/* 
+} 
+ 
 .label {
   border-top: 1px solid #171212;
   border-left: 1px solid #171212;
@@ -66,4 +66,4 @@
   border-bottom: 1px solid #171212;
   background-color: transparent;
   font-size: 24px;
-} */
+} 

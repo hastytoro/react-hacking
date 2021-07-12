@@ -1,7 +1,7 @@
 import * as React from 'react';
 import axios from 'axios';
 
-import './App.css';
+import styles from './App.module.css';
 
 const useSemiPersistentState = (key, initialState) => {
   const [value, setValue] = React.useState(
@@ -95,8 +95,8 @@ const App = () => {
   };
 
   return (
-    <div className="container">
-      <h1 className="headline-primary">Hacker Stories</h1>
+    <div className={styles.container}>
+      <h1 className={styles.headlinePrimary}>Hacker Stories</h1>
       <SearchForm
         searchTerm={searchTerm}
         onSearchInput={handleSearchInput}
@@ -114,7 +114,7 @@ const App = () => {
 };
 
 const SearchForm = ({ searchTerm, onSearchInput, onSearchSubmit }) => (
-  <form onSubmit={onSearchSubmit} className="search-form">
+  <form onSubmit={onSearchSubmit} className={styles.searchForm}>
     <InputWithLabel
       id="search"
       value={searchTerm}
@@ -126,7 +126,7 @@ const SearchForm = ({ searchTerm, onSearchInput, onSearchSubmit }) => (
     <button
       type="submit"
       disabled={!searchTerm}
-      className="button button_large"
+      className={`${styles.button} ${styles.buttonLarge}`}
     >
       Submit
     </button>
@@ -168,7 +168,7 @@ const List = ({ list, onRemoveItem }) => (
 const Item = ({ item, onRemoveItem }) => {
   const { url, author, title, num_comments, points } = item;
   return (
-    <li className="item">
+    <li className={styles.item}>
       <span style={{ width: '40%' }}>
         <a href={url}>{title}</a>
       </span>
@@ -179,7 +179,7 @@ const Item = ({ item, onRemoveItem }) => {
         <button
           type="button"
           onClick={() => onRemoveItem(item)}
-          className="button button_small"
+          className={`${styles.button} ${styles.buttonSmall}`}
         >
           Dismiss
         </button>
