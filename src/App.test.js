@@ -1,4 +1,5 @@
 import * as React from 'react';
+import axios from 'axios';
 import { render, screen, fireEvent, act } from '@testing-library/react';
 
 import App, {
@@ -8,6 +9,8 @@ import App, {
   SearchForm,
   InputWithLabel,
 } from './App';
+
+jest.mock('axios');
 
 const storyOne = {
   title: 'React',
@@ -73,5 +76,16 @@ describe('SearchForm', () => {
   test('renders the input field with its value', () => {
     render(<SearchForm {...searchFormProps} />);
     expect(screen.getByDisplayValue('React')).toBeInTheDocument();
+  });
+});
+
+describe('App', () => {
+  test('succeeds fetching data', async () => {
+    const promise = Promise.resolve({ data: { hits: stories } });
+    axios.get.mockImplementationOnce(() => promise);
+    render(<App />);
+    expect(screen.queryByText(/Loading/)).toBeInTheDocument();
+    await act(() => promise);
+    expect(screen.queryByText(/Loading/)).toBeNull();
   });
 });
