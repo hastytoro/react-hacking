@@ -122,7 +122,7 @@ const SearchForm = ({ searchTerm, onSearchInput, onSearchSubmit }) => (
       isFocused
       onInputChange={onSearchInput}
     >
-      <strong>Search:</strong>
+      Search:
     </InputWithLabel>
     <button
       type="submit"

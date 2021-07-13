@@ -77,6 +77,10 @@ describe('SearchForm', () => {
     render(<SearchForm {...searchFormProps} />);
     expect(screen.getByDisplayValue('React')).toBeInTheDocument();
   });
+  test('renders snapshot', () => {
+    const { container } = render(<SearchForm {...searchFormProps} />);
+    expect(container.firstChild).toMatchSnapshot();
+  });
 });
 
 describe('App', () => {
