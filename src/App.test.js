@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { render, screen, fireEvent, act } from '@testing-library/react';
 
 import App, {
   storiesReducer,
@@ -39,5 +40,38 @@ describe('storiesReducer', () => {
       isError: false,
     };
     expect(newState).toStrictEqual(expectedState);
+  });
+});
+
+describe('Item', () => {
+  test('renders all properties', () => {
+    render(<Item item={storyOne} />);
+    expect(screen.getByText('Jordan Walke')).toBeInTheDocument();
+    expect(screen.getByText('React')).toHaveAttribute(
+      'href',
+      'https://reactjs.org/',
+    );
+  });
+  test('renders a clickable dismiss button', () => {
+    render(<Item item={storyOne} />);
+    expect(screen.getByRole('button')).toBeInTheDocument();
+  });
+  test('clicking the dismiss button calls the callback handler', () => {
+    const handleRemoveItem = jest.fn();
+    render(<Item item={storyOne} onRemoveItem={handleRemoveItem} />);
+    fireEvent.click(screen.getByRole('button'));
+    expect(handleRemoveItem).toHaveBeenCalledTimes(1);
+  });
+});
+
+describe('SearchForm', () => {
+  const searchFormProps = {
+    searchTerm: 'React',
+    onSearchInput: jest.fn(),
+    onSearchSubmit: jest.fn(),
+  };
+  test('renders the input field with its value', () => {
+    render(<SearchForm {...searchFormProps} />);
+    expect(screen.getByDisplayValue('React')).toBeInTheDocument();
   });
 });
