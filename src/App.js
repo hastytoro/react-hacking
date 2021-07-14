@@ -1,6 +1,10 @@
 import * as React from 'react';
 import axios from 'axios';
 import { sortBy } from 'lodash';
+import { ReactComponent as Check } from './check.svg';
+
+// Styling:
+import './App.css';
 
 // API section:
 const API_BASE = 'https://hn.algolia.com/api/v1';
@@ -155,8 +159,8 @@ const App = () => {
   };
 
   return (
-    <div>
-      <h1>My Hacker Stories</h1>
+    <div className="container">
+      <h1 className="headline-primary">My Hacker Stories</h1>
 
       <SearchForm
         searchTerm={searchTerm}
@@ -291,8 +295,11 @@ const List = ({ list, onRemoveItem }) => {
             Points
           </button>
         </span>
-        <span style={{ width: '10%' }}>Actions</span>
+        <span style={{ width: '10%' }}>
+          <strong>Actions</strong>
+        </span>
       </li>
+      <hr />
       {sortedList.map((item) => (
         <Item key={item.objectID} item={item} onRemoveItem={onRemoveItem} />
       ))}
@@ -301,7 +308,7 @@ const List = ({ list, onRemoveItem }) => {
 };
 
 const Item = ({ item, onRemoveItem }) => (
-  <li style={{ display: 'flex' }}>
+  <li className="item" style={{ display: 'flex' }}>
     <span style={{ width: '40%' }}>
       <a href={item.url}>{item.title}</a>
     </span>
@@ -310,7 +317,7 @@ const Item = ({ item, onRemoveItem }) => (
     <span style={{ width: '10%' }}>{item.points}</span>
     <span style={{ width: '10%' }}>
       <button type="button" onClick={() => onRemoveItem(item)}>
-        Dismiss
+        <Check height="22px" width="22px" />
       </button>
     </span>
   </li>
